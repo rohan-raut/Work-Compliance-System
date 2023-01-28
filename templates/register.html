@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Register User{% endblock title %}
+
+{% block additional_links %}
+<link rel="stylesheet" href="/static/register.css">
+{% endblock additional_links %}
+
+{% block body %}
+
+<h1>Register User</h1>
+
+<div class="container form_box border border-dark">
+    <form>
+        <div class="d-flex justify-content-between">
+            <div class="mb-3 w-47">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" name="first_name">
+            </div>
+            <div class="mb-3 w-47">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="last_name">
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <div class="mb-3 w-47">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email">
+            </div>
+            <div class="mb-3 w-47">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="text" class="form-control" name="phone" placeholder="10 Digits">
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <div class="w-47">
+                <label for="department" class="form-label">Department</label>
+                <select class="form-select mb-3" aria-label="Default select example" name="department">
+                    <option selected>Open this select menu</option>
+                    <option value="Computer">Computer</option>
+                    <option value="Mechanical">Mechanical</option>
+                    <option value="Civil">Civil</option>
+                </select>
+            </div>
+
+            <div class="w-47">
+                <label for="user_role" class="form-label">User Role</label>
+                <select class="form-select mb-3" aria-label="Default select example" name="user_role">
+                    <option selected>Open this select menu</option>
+                    <option value="Management">Management</option>
+                    <option value="Principle">Principle</option>
+                    <option value="Head of Department">Head of Department</option>
+                    <option value="Teaching Faculty">Teaching Faculty</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <div class="mb-3 w-47">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password">
+            </div>
+            <div class="mb-3 w-47">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" name="confirm_password">
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
+      </form>
+</div>
+
+{% endblock body %}
+
+

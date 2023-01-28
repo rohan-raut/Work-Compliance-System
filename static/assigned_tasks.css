@@ -1,0 +1,20 @@
+.main_content{
+    padding: 20px;
+}
+
+.task{
+    padding: 5px 12px;
+    width: 50vw;
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+.task_list{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.assignedTo_review{
+    height: 32px;
+}

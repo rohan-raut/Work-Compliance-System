@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock title %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/base.css">
+
+    {% block additional_links %}{% endblock additional_links %}
+  </head>
+
+  <body>
+
+    <!-- header  -->
+    <div class="container-fluid header d-flex justify-content-between">
+      <div class="container">
+        Work Prism
+      </div>
+      <div class="container user_email">
+        rohanraut124@gmail.com
+      </div>
+    </div>
+
+    <!-- left sidebar -->
+    <div class="container-fluid d-flex">
+
+      <div class="left_sidebar d-flex flex-column">
+        <div class="left_sidebar_items">Profile</div>
+        <div class="left_sidebar_items">Assign Task</div>
+        <div class="left_sidebar_items">Assigned Task</div>
+        <div class="left_sidebar_items">To Do</div>
+        <div class="left_sidebar_items">Report</div>
+        <div class="left_sidebar_items">History</div>
+        <div class="left_sidebar_items">Calendar</div>
+        <div class="left_sidebar_items">Search</div>
+      </div>
+
+      <div class="main_content">
+        <!-- extend the content from here  -->
+        {% block body %} {% endblock body %}
+      </div>
+    </div>
+    
+
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>

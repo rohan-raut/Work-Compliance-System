@@ -1,0 +1,37 @@
+.user_email{
+    text-align: right;
+}
+
+.header{
+    height: 6vh;
+    align-items: center;
+    color: white;
+    background-color: #1d2327;
+}
+
+.container-fluid{
+    padding: 0px;
+}
+
+.left_sidebar{
+    color: white;
+    background-color: #1d2327;
+    height: 94vh;
+    width: 18vw;
+    display: inline-block;
+    padding-left: 30px;
+    padding-top: 10px;
+}
+
+.main_content{
+    width: 82vw;
+}
+
+.left_sidebar_items{
+    padding: 8px;
+}
+
+h1{
+    text-align: center;
+    margin-top: 10px;
+}
