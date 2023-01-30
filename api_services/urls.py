@@ -1,6 +1,6 @@
 from django.urls import path
 from api_services.views import task_list, task_detail, file_list, file_detail, comment_list, registration_view
-
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 urlpatterns = [
@@ -10,6 +10,7 @@ urlpatterns = [
     # path('file-details/<int:pk>/', file_detail, name="file_detail"),
     path('comment_list/', comment_list, name="comment_list"),
     path('register/', registration_view, name="registration_view"),
+    path('login/', obtain_auth_token, name="login"),
 ]
 
 

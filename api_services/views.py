@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api_services.models import Task, File, Comment
 from api_services.serializers import TaskSerializer, FileSerializer, CommentSerializer, AccountSerializer
+from rest_framework.authtoken.models import Token
 
 
 # api view functions for tasks
@@ -116,6 +117,8 @@ def registration_view(request):
             data['first_name'] = account.first_name
             data['last_name'] = account.last_name
             data['user_role'] = account.user_role
+            token = Token.objects.get(user=account).key
+            data['token'] = token
         else:
             data = serializer.errors
         return Response(data)
