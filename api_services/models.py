@@ -1,15 +1,17 @@
 from enum import unique
 from tabnanny import verbose
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from traitlets import default
 
 # Create your models here.
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, user_role, password=None):
+    def create_user(self, email, username, first_name, last_name, user_role, password=None):
         if not email:
             raise ValueError("User must have an email address")
+        if not username:
+            raise ValueError("User must have a username")
         if not first_name:
             raise ValueError("User must have a first name")
         if not last_name:
@@ -19,6 +21,7 @@ class MyAccountManager(BaseUserManager):
 
         user = self.model(
             email = self.normalize_email(email),
+            username = username,
             first_name = first_name,
             last_name = last_name,
             user_role = user_role
@@ -29,9 +32,10 @@ class MyAccountManager(BaseUserManager):
         return user
 
     
-    def create_superuser(self, email, first_name, last_name, user_role, password):
+    def create_superuser(self, email, username, first_name, last_name, user_role, password):
         user = self.create_user(
-            email = self.normalize_email(email),
+            email = email,
+            username = username,
             password = password,
             first_name = first_name,
             last_name = last_name,
@@ -45,7 +49,7 @@ class MyAccountManager(BaseUserManager):
 
 
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=254, unique=True)
     username = models.CharField(max_length=100, unique=True)
     first_name = models.CharField(max_length=100)
@@ -56,12 +60,12 @@ class Account(AbstractBaseUser):
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name", "user_role"]
+    REQUIRED_FIELDS = ["username", "first_name", "last_name", "user_role"]
 
     objects = MyAccountManager()
 
@@ -77,7 +81,7 @@ class Account(AbstractBaseUser):
 
 
 # Task database model
-class Tasks(models.Model):
+class Task(models.Model):
     task_id = models.IntegerField(primary_key=True)
     assignor_name = models.CharField(max_length=500)
     assignor_email = models.EmailField()
@@ -91,7 +95,7 @@ class Tasks(models.Model):
 
 
 # File database for every tasks
-class Files(models.Model):
+class File(models.Model):
     task_id = models.IntegerField()
     file_address = models.CharField(max_length=500)
     file_name = models.CharField(max_length=500)        # from user computer
@@ -100,7 +104,7 @@ class Files(models.Model):
 
 
 # Comments for each tasks
-class Comments(models.Model):
+class Comment(models.Model):
     task_id = models.IntegerField()
     date_time = models.DateTimeField(auto_now=True)
     commentor_name = models.CharField(max_length=500)

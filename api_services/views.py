@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from api_services.models import Tasks, Files, Comments
-from api_services.serializers import TasksSerializer, FilesSerializer, CommentsSerializer
+from api_services.models import Task, File, Comment
+from api_services.serializers import TaskSerializer, FileSerializer, CommentSerializer, AccountSerializer
 
 
 # api view functions for tasks
@@ -10,12 +10,12 @@ from api_services.serializers import TasksSerializer, FilesSerializer, CommentsS
 def task_list(request):
 
     if request.method == 'GET':
-        snippets = Tasks.objects.all()
-        serializer = TasksSerializer(snippets, many=True)
+        snippets = Task.objects.all()
+        serializer = TaskSerializer(snippets, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = TasksSerializer(data=request.data)
+        serializer = TaskSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -25,16 +25,16 @@ def task_list(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def task_detail(request, pk):
     try:
-        task_detail = Tasks.objects.get(pk=pk)
-    except Tasks.DoesNotExist:
+        task_detail = Task.objects.get(pk=pk)
+    except Task.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = TasksSerializer(task_detail)
+        serializer = TaskSerializer(task_detail)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = TasksSerializer(task_detail, data=request.data)
+        serializer = TaskSerializer(task_detail, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -51,12 +51,12 @@ def task_detail(request, pk):
 def file_list(request):
 
     if request.method == 'GET':
-        snippets = Files.objects.all()
-        serializer = FilesSerializer(snippets, many=True)
+        snippets = File.objects.all()
+        serializer = FileSerializer(snippets, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = FilesSerializer(data=request.data)
+        serializer = FileSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -66,16 +66,16 @@ def file_list(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def file_detail(request, pk):
     try:
-        file_details = Files.objects.get(pk=pk)
-    except Files.DoesNotExist:
+        file_details = File.objects.get(pk=pk)
+    except File.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = FilesSerializer(file_details)
+        serializer = FileSerializer(file_details)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = FilesSerializer(file_details, data=request.data)
+        serializer = FileSerializer(file_details, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -91,12 +91,12 @@ def file_detail(request, pk):
 def comment_list(request):
 
     if request.method == 'GET':
-        snippets = Comments.objects.all()
-        serializer = CommentsSerializer(snippets, many=True)
+        snippets = Comment.objects.all()
+        serializer = CommentSerializer(snippets, many=True)
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = CommentsSerializer(data=request.data)
+        serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -104,3 +104,18 @@ def comment_list(request):
 
 
 
+@api_view(['POST',])
+def registration_view(request):
+    if request.method == 'POST':
+        serializer = AccountSerializer(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            account = serializer.save()
+            data['response'] = 'Successfully registered a new user.'
+            data['email'] = account.email
+            data['first_name'] = account.first_name
+            data['last_name'] = account.last_name
+            data['user_role'] = account.user_role
+        else:
+            data = serializer.errors
+        return Response(data)
