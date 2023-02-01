@@ -14,7 +14,7 @@
 
 <!-- Custome CSS -->
 <link rel="stylesheet" href="/static/login.css">
-<title>WebPage</title>
+<title>Login</title>
 
 </head>
 <body>
@@ -26,12 +26,13 @@
               
             </div>
           </div>
-          <form class="login-form">
+          <form action="/login/" class="login-form" method="POST">
+            {% csrf_token %}
               <h4>Email address</h4>
-            <input type="text"/>
+            <input type="text"/ name="email">
               <h4>Password</h4>
-            <input type="password"/>
-            <button>login</button>
+            <input type="password"/ name="password">
+            <button type="submit">login</button>
     
           </form>
         </div>

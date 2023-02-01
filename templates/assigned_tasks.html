@@ -11,27 +11,19 @@
 <h1>Assigned Task List</h1>
 
 <div class="task_list">
-    <div class="task border border-primary ">
-        <div class="title_date d-flex justify-content-between">
-            <h4>Make Attendance Record</h4>
-            <p>25/01/2023</p>
-        </div>
-        <div class="assignedTo_review d-flex justify-content-between">
-            <p>Assigned To: Prof. Devyani Bonde</p>
-            <button type="button" class="btn btn-primary btn-sm">Small button</button>
-        </div>
-    </div>
 
-
-    <div class="task border border-primary">
-        <div class="title_date d-flex justify-content-between">
-            <h4>Make Attendance Record</h4>
-            <p>25/01/2023</p>
+    {% for x in task_list %}
+        <div class="task border border-primary ">
+            <div class="title_date d-flex justify-content-between">
+                <h4>{{x.title}}</h4>
+                <p>{{x.deadline}}</p>
+            </div>
+            <div class="assignedTo_review d-flex justify-content-between">
+                <p>Assigned To: {{x.assignee_name}}</p>
+                <button type="button" class="btn btn-primary btn-sm">Small button</button>
+            </div>
         </div>
-        <div class="assignedTo_review d-flex justify-content-between">
-            <p>Assigned To: Prof. Devyani Bonde</p>
-        </div>
-    </div>
+    {% endfor %}
 
 </div>
 

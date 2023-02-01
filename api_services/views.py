@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from api_services.models import Task, File, Comment
 from api_services.serializers import TaskSerializer, FileSerializer, CommentSerializer, AccountSerializer
 from rest_framework.authtoken.models import Token
+from api_services.filters import TaskFilter 
 
 
 # api view functions for tasks
@@ -12,7 +13,10 @@ def task_list(request):
 
     if request.method == 'GET':
         snippets = Task.objects.all()
-        serializer = TaskSerializer(snippets, many=True)
+        filterset = TaskFilter(request.GET, queryset=snippets)
+        if filterset.is_valid():
+            snippets = filterset.qs
+        serializer = TaskSerializer(snippets, many=True)   
         return Response(serializer.data)
 
     elif request.method == 'POST':

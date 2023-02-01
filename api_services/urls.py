@@ -11,6 +11,7 @@ urlpatterns = [
     path('comment_list/', comment_list, name="comment_list"),
     path('register/', registration_view, name="registration_view"),
     path('login/', obtain_auth_token, name="login"),
+    # path('task-details', TaskListView.as_view()),
 ]
 
 

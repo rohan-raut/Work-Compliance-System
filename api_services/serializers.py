@@ -6,6 +6,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ['task_id', 'assignor_name', 'assignor_email', 'assignee_name', 'assignee_email', 'title', 'description' ,'deadline', 'status']
+        read_only_fields = ['task_id']
 
 
 class FileSerializer(serializers.ModelSerializer):
