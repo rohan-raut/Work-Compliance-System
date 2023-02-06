@@ -122,3 +122,11 @@ class Comment(models.Model):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+
+# Hierarchy model
+class Organization_Hierarchy(models.Model):
+    user_role = models.CharField(max_length=200)
+    priority = models.IntegerField()
+    show_report = models.BooleanField(default=False)

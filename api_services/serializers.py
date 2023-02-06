@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api_services.models import Task, File, Comment, Account
+from api_services.models import Task, File, Comment, Account, Organization_Hierarchy
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -19,6 +19,12 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['task_id', 'date_time', 'commentor_name', 'comment']
+
+
+class Organization_HierarchySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization_Hierarchy
+        fields = ['user_role', 'priority', 'show_report']
 
 
 

@@ -1,10 +1,10 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from api_services.models import Task, File, Comment
-from api_services.serializers import TaskSerializer, FileSerializer, CommentSerializer, AccountSerializer
+from api_services.models import Task, File, Comment, Organization_Hierarchy
+from api_services.serializers import TaskSerializer, FileSerializer, CommentSerializer, AccountSerializer, Organization_HierarchySerializer
 from rest_framework.authtoken.models import Token
-from api_services.filters import TaskFilter 
+from api_services.filters import TaskFilter, Organization_Hierarchy_Filter
 
 
 # api view functions for tasks
@@ -126,3 +126,47 @@ def registration_view(request):
         else:
             data = serializer.errors
         return Response(data)
+
+
+# api view functions for organization hierarchy
+@api_view(['GET', 'POST'])
+def organization_hierarchy_view(request):
+
+    if request.method == 'GET':
+        snippets = Organization_Hierarchy.objects.all()
+        filterset = Organization_Hierarchy_Filter(request.GET, queryset=snippets)
+        if filterset.is_valid():
+            snippets = filterset.qs
+        serializer = Organization_HierarchySerializer(snippets, many=True)   
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = Organization_HierarchySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+
+Reference Links:
+https://stackoverflow.com/questions/65096144/how-to-add-filtering-for-function-based-views-in-django-rest-framework
+
+'''

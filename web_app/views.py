@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from api_services.models import Account, Task
+from api_services.models import Account, Task, Organization_Hierarchy
 import datetime
 import requests
 import json
@@ -57,7 +57,10 @@ def to_do_view(request):
 
 
 def register_view(request):
-    return render(request, 'register.html')
+    data = {}
+    hierarchy = Organization_Hierarchy.objects.all()
+    data['user_roles'] = hierarchy
+    return render(request, 'register.html', data)
 
 
 def login_view(request):
@@ -80,3 +83,42 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('/login')
+
+
+def make_hierarchy_view(request):
+
+    if(request.method == "POST"):
+        data_list = []
+        for key in request.POST.items():
+            lst = key[0].split('_')
+            if(lst[0] == 'user' and request.POST[key[0]] != ''):  # checking for blank data row
+                data_list.append({
+                    'user_role': request.POST[key[0]],
+                    'priority': request.POST['priority_' + lst[2]],
+                    'show_report': request.POST['show_report_' + lst[2]],
+                    })
+        
+        # delete all present rows and add new data
+        Organization_Hierarchy.objects.all().delete()
+        for x in data_list:
+            show_report_in_bool = True
+            if(x['show_report'] == 'N'):
+                show_report_in_bool = False
+            obj = Organization_Hierarchy(user_role=x['user_role'], priority=x['priority'], show_report=show_report_in_bool)
+            obj.save()
+
+        
+
+    data = {}
+    api = "http://127.0.0.1:8000/api/organization-hierarchy/"
+    resp = requests.get(api)
+    data['objs'] = json.loads(resp.text)
+
+    counter = 0
+    for x in data['objs']:
+        x['num'] = counter
+        counter = counter + 1
+    
+    data['rows'] = len(data['objs'])
+    
+    return render(request, 'make_hierarchy.html', data)

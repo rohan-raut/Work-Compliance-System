@@ -1,0 +1,46 @@
+.table_container{
+    padding: 20px 150px;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+table{
+    width: 600px;
+    text-align: center;
+    justify-content: center;
+}
+
+th{
+    margin: auto;
+    width: 50px;
+}
+
+input{
+    width: 100%;
+    text-align: center;
+}
+
+button{
+    align-items: center;
+}
+
+#add_row_btn{
+    width: 75px;
+    margin-right: 40px;
+}
+
+#submit_btn{
+    width: 75px;
+    margin-left: 40px;
+}
+
+.button_div{
+    margin-top: 20px;
+}
+
+.delete_btn{
+    padding: 0px 6px;
+    font-size: 12px;
+}

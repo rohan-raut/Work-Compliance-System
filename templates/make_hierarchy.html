@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Make Hierarchy{% endblock title %}
+
+{% block additional_links %}
+<link rel="stylesheet" href="/static/make_hierarchy.css">
+{% endblock additional_links %}
+
+{% block body %}
+
+<h1>Make Hierarchy</h1>
+
+<div class="table_container d-flex justify-content-center m-3">
+    <form method="post" action="/make-hierarchy/">
+        {% csrf_token %}
+        <table id="hierarchy_table">
+            <tr>
+              <th>User Role</th>
+              <th>Priority</th>
+              <th>Show Report</th>
+              <th>Actions</th>
+            </tr>
+    
+            {% for x in objs %}
+                <tr id="row_number_{{x.num}}">
+                    <td><input id="user_role_{{x.num}}" type="text" value="{{x.user_role}}" name="user_role_{{x.num}}" onchange="changeValInput('user_role_{{x.num}}')"></td>
+                    <td><input id="priority_{{x.num}}" type="number" value="{{x.priority}}" name="priority_{{x.num}}" onchange="changeValInput('priority_{{x.num}}')"></td>
+                    <td><input id="show_report_{{x.num}}" type="text" value="{% if x.show_report %}Y{% else %}N{% endif %}" name="show_report_{{x.num}}" onchange="changeValInput('show_report_{{x.num}}')"></td>
+                    <td><button type="button" class="btn btn-sm btn-danger delete_btn" onclick="delete_row('row_number_{{x.num}}')">Delete</button></td>
+                </tr>
+            {% endfor %}
+            
+        </table>
+
+        <div class="d-flex justify-content-center button_div">
+            <button id="add_row_btn" type="button" class="btn btn-sm btn-primary" onclick="add_new_row()">Add Row</button>
+            <button id="submit_btn" type="submit" class="btn btn-sm btn-primary">Submit</button>
+        </div>
+    </form>
+    
+    <script src="/static/make_hierarchy.js"></script>
+</div>
+
+
+
+
+
+
+<script>
+    let cnt_rows = {{rows}}
+</script>
+
+
+{% endblock body %}
+
+

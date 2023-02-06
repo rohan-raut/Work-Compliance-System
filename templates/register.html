@@ -49,10 +49,9 @@
                 <label for="user_role" class="form-label">User Role</label>
                 <select class="form-select mb-3" aria-label="Default select example" name="user_role">
                     <option selected>Open this select menu</option>
-                    <option value="Management">Management</option>
-                    <option value="Principle">Principle</option>
-                    <option value="Head of Department">Head of Department</option>
-                    <option value="Teaching Faculty">Teaching Faculty</option>
+                    {% for x in user_roles %}
+                    <option value="{{x.user_role}}">{{x.user_role}}</option>          
+                    {% endfor %}
                 </select>
             </div>
         </div>
