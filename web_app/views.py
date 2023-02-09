@@ -122,3 +122,23 @@ def make_hierarchy_view(request):
     data['rows'] = len(data['objs'])
     
     return render(request, 'make_hierarchy.html', data)
+
+
+
+def task_detail_view(request, pk):
+    data = {}
+    api = "http://127.0.0.1:8000/api/task-details/" + str(pk) + "/"
+    resp = requests.get(api)
+    json_data = json.loads(resp.text)
+    data = json_data
+    print(data)
+    return render(request, 'task_detail.html', data)    
+
+
+
+
+
+
+# git remote add origin git@github.com:rohan-raut/Work-Compliance-System.git
+# git branch -M main
+# git push -u origin main

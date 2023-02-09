@@ -26,14 +26,18 @@
     <div class="container-fluid d-flex">
 
       <div class="left_sidebar d-flex flex-column">
-        <div class="left_sidebar_items">Profile</div>
-        <div class="left_sidebar_items">Assign Task</div>
-        <div class="left_sidebar_items">Assigned Task</div>
-        <div class="left_sidebar_items">To Do</div>
-        <div class="left_sidebar_items">Report</div>
-        <div class="left_sidebar_items">History</div>
-        <div class="left_sidebar_items">Calendar</div>
-        <div class="left_sidebar_items">Search</div>
+        <a class="left_sidebar_items" href="">Profile</a>
+        <a class="left_sidebar_items" href="/assign-task/">Assign Task</a>
+        <a class="left_sidebar_items" href="/assigned-tasks/">Assigned Task</a>
+        <a class="left_sidebar_items" href="/to-do/">To Do</a>
+        <a class="left_sidebar_items" href="">Report</a>
+        <a class="left_sidebar_items" href="">History</a>
+        <a class="left_sidebar_items" href="">Calendar</a>
+        <a class="left_sidebar_items" href="">Search</a>
+        {% if request.user.is_superuser %}
+          <a class="left_sidebar_items" href="/register/">Add User</a>
+          <a class="left_sidebar_items" href="/make-hierarchy/">Make Hierarchy</a>
+        {% endif %}
       </div>
 
       <div class="main_content">

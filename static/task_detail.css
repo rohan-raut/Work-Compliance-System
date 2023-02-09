@@ -1,0 +1,14 @@
+.task_detail_container{
+    width: 80%;
+    margin-top: 10px;
+}
+
+.comment_section{
+    width: 80%;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+h1{
+    text-align: left;
+}

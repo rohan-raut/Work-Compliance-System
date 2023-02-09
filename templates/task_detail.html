@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Task Detail{% endblock title %}
+
+{% block additional_links %}
+<link rel="stylesheet" href="/static/task_detail.css">
+{% endblock additional_links %}
+
+{% block body %}
+
+<div class="container task_detail_container border border-dark">
+    <h1>{{title}}</h1>
+    <p>Description: {{description}}</p>
+</div>
+
+<div class="container comment_section border border-dark">
+    <p>Comment</p>
+    <form action="/task-detail/{{task_id}}/" method="post">
+        <input type="text">
+        <button type="submit" class="btn btn-sm btn-primary">Send</button>
+    </form>
+</div>
+
+{% endblock body %}
+
+
