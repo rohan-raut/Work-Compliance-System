@@ -27,8 +27,8 @@
                 <label for="assign_to" class="form-label">Assign To</label>
                 <select class="form-select mb-3" aria-label="Default select example" name="assign_to">
                     <option selected>Open this select menu</option>
-                    {% for x in emails %}
-                        <option value="{{x}}">{{x}}</option>
+                    {% for x in user_info %}
+                        <option value="{{x.email}}">{{x.name}}</option>
                     {% endfor %}
                 </select>
             </div>

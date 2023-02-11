@@ -11,7 +11,8 @@
 <h1>Register User</h1>
 
 <div class="container form_box border border-dark">
-    <form>
+    <form method="post" action="/register/">
+        {% csrf_token %}
         <div class="d-flex justify-content-between">
             <div class="mb-3 w-47">
                 <label for="first_name" class="form-label">First Name</label>
@@ -59,11 +60,11 @@
         <div class="d-flex justify-content-between">
             <div class="mb-3 w-47">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password">
+                <input type="password" class="form-control" name="password1">
             </div>
             <div class="mb-3 w-47">
                 <label for="confirm_password" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" name="confirm_password">
+                <input type="password" class="form-control" name="password2">
             </div>
         </div>
         

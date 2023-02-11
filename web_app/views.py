@@ -7,6 +7,36 @@ import requests
 import json
 from django.contrib.auth import logout
 
+# importing for notification
+import smtplib, email
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+
+# fuction to send email notification
+def send_notification(receiver_email, subject, body):
+    sender_email = 'rohan.raut@mmit.edu.in'
+    sender_name = 'Rohan Raut'
+    password = 'chzhpfltnmgwnfnv'
+    try:
+        smtpObj = smtplib.SMTP(host='smtp.gmail.com', port=587)
+        smtpObj.starttls()
+        smtpObj.login(sender_email, password)
+        message = MIMEMultipart()
+        message["From"] = sender_name
+        message["To"] = receiver_email
+        message["Subject"] = subject
+        message.attach(MIMEText(body, "plain"))
+        text = message.as_string()
+        smtpObj.sendmail(sender_email, receiver_email, text)
+        print("Successfully sent email")
+    except smtplib.SMTPException:
+        print("Error: unable to send email")
+
+
+
 # Create your views here.
 
 def dashboard_view(request):
@@ -33,12 +63,18 @@ def assign_task_view(request):
 
 
     user_list = Account.objects.values()
+    hierarchy = Organization_Hierarchy.objects.all()
     data = {}
-    data['emails'] = []
+    data['user_info'] = []
+
+    hierarchy_map = {}
+    for x in hierarchy:
+        hierarchy_map[x.user_role] = x.priority
+
+
     for x in user_list:
-        data['emails'].append(x['email'])
-        # data['first_name'].append(x['first_name'])
-        # data['last_name'].append(x['last_name'])
+        if(hierarchy_map[x['user_role']] >= hierarchy_map[request.user.user_role] and x['email'] != request.user.email):
+            data['user_info'].append({'email': x['email'], 'name': x['first_name']+' '+x['last_name']})
     
     return render(request, 'assign_task.html', data)
 
@@ -57,6 +93,23 @@ def to_do_view(request):
 
 
 def register_view(request):
+    if(request.method == 'POST'):
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        department = request.POST['department']
+        user_role = request.POST['user_role']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+
+        if(password1 == password2):
+            new_user = Account(email=email, username=email, first_name=first_name, last_name=last_name, user_role=user_role, department=department, phone=phone)
+            new_user.set_password(password1)
+            new_user.save()
+        else:
+            return HttpResponse("<p>Password's should match.</p>")
+
     data = {}
     hierarchy = Organization_Hierarchy.objects.all()
     data['user_roles'] = hierarchy
