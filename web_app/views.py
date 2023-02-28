@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from api_services.models import Account, Task, Organization_Hierarchy
+from api_services.models import Account, Task, Organization_Hierarchy, File
 import datetime
 import requests
 import json
@@ -54,10 +54,19 @@ def assign_task_view(request):
         assignor_name = request.user.first_name + ' ' + request.user.last_name
         assignor_email = request.user.email
         status = "In Progress"
+        files = request.FILES.getlist('upload_file')
+        print(files)
 
         task_obj = Task(assignor_name=assignor_name, assignor_email=assignor_email, assignee_name=assignee_name, assignee_email=assignee_email, title=title, description=description, deadline=deadline, status=status)
-
         task_obj.save()
+
+        last_obj = Task.objects.last()
+        task_id = last_obj.task_id
+
+
+        for x in files:
+            file_obj = File(task_id=task_id, file=x, uploaded_by_email=assignor_email)
+            file_obj.save()
 
         return redirect('/assigned-tasks')
 

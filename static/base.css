@@ -1,37 +1,50 @@
-.user_email{
-    text-align: right;
+.menu_icon{
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px 0px;
 }
 
-.header{
-    height: 6vh;
-    align-items: center;
+.menu_container{
+    margin-right: 20px;
+}
+
+.navbar_custom{
+    background-color: #9B2620 !important;
     color: white;
-    background-color: #1d2327;
 }
 
-.container-fluid{
-    padding: 0px;
-}
-
-.left_sidebar{
+.navbar-brand{
     color: white;
-    background-color: #1d2327;
-    height: 94vh;
-    width: 18vw;
+}
+.navbar-brand:hover{
+    color: white;
+}
+
+
+.offcanvas{
+    width: 300px !important;
+    background-color: #E8E9EF !important;
+}
+
+body{
+    background-color: #E8E9EF;
+}
+
+.menu_icons{
     display: inline-block;
-    padding-left: 30px;
-    padding-top: 10px;
-}
-
-.main_content{
-    width: 82vw;
-}
-
-.left_sidebar_items{
-    padding: 8px;
+    width: 50px;
 }
 
 h1{
     text-align: center;
-    margin-top: 10px;
+    font-size: 25px;
+}
+
+
+/* hide right corner email for mobile */
+@media screen and (max-width: 550px){
+    .user_email{
+        visibility: hidden;
+    }
 }

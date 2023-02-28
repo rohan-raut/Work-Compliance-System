@@ -102,9 +102,7 @@ class Task(models.Model):
 # File database for every tasks
 class File(models.Model):
     task_id = models.IntegerField()
-    file_address = models.CharField(max_length=500)
-    file_name = models.CharField(max_length=500)        # from user computer
-    file_type = models.CharField(max_length=100)        # pdf, word, etc
+    file = models.FileField()
     uploaded_by_email = models.EmailField()             # email of assignee or assignor
 
 
