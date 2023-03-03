@@ -7,7 +7,7 @@ table, th, td {
 }
 
 table{
-    width: 600px;
+    /* width: 600px; */
     text-align: center;
     justify-content: center;
 }
@@ -20,6 +20,11 @@ th{
 input{
     width: 100%;
     text-align: center;
+    border: none;
+}
+
+input:focus{
+    outline: none;
 }
 
 button{
@@ -43,4 +48,36 @@ button{
 .delete_btn{
     padding: 0px 6px;
     font-size: 12px;
+}
+
+.main_content{
+    background-color: white;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    margin-top: 25px;
+}
+
+
+@media screen and (max-width: 576px){
+    table{
+        width: 90vw;
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px){
+    table{
+        width: 65vw;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px){
+    table{
+        width: 70vw;
+    }
+}
+
+@media screen and (min-width: 992px){
+    table{
+        width: 700px;
+    }
 }
