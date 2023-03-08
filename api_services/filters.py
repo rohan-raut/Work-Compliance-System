@@ -5,7 +5,7 @@ from api_services.models import Task, Organization_Hierarchy
 class TaskFilter(django_filters.FilterSet):
     class Meta:
         model = Task
-        fields = ['assignor_email']
+        fields = ['assignor_email', 'assignee_email', 'status']
 
 
 class Organization_Hierarchy_Filter(django_filters.FilterSet):

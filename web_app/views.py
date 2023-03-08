@@ -94,11 +94,24 @@ def assigned_tasks_view(request):
     resp = requests.get(api)
     json_data = json.loads(resp.text)
     data['task_list'] = json_data
+
+    # Convert datatime to date
+    for x in data['task_list']:
+        x['deadline'] = x['deadline'][0:10]
     return render(request, 'assigned_tasks.html', data)
 
 
 def to_do_view(request):
-    return render(request, 'to_do.html')
+    data = {}
+    api = "http://127.0.0.1:8000/api/task-details?assignee_email=" + request.user.email + "&status=In Progress"
+    resp = requests.get(api)
+    json_data = json.loads(resp.text)
+    data['task_list'] = json_data
+
+    # Convert datatime to date
+    for x in data['task_list']:
+        x['deadline'] = x['deadline'][0:10]
+    return render(request, 'to_do.html', data)
 
 
 def register_view(request):
