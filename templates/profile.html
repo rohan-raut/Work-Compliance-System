@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block additional_links %}
+<link rel="stylesheet" href="/static/profile.css">
+{% endblock additional_links %}
+
+{% block body %}
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-11 col-md-11 col-lg-9 profile_container border border-dark">
+            <h1 class="mb-4">Profile</h1>
+
+            <form action="/profile/{{user_detail.email}}/" method="POST" class="px-5">
+                {% csrf_token %}
+
+                <div class="row justify-content-between">
+                    <div class="mb-5 col-12 col-sm-11 col-md-6 col-lg-6">
+                        <label for="exampleInputEmail1" class="form-label">First Name</label>
+                        <input type="text" name="first_name" value="{{user_detail.first_name}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-5 col-12 col-sm-11 col-md-6 col-lg-6">
+                      <label for="exampleInputEmail1" class="form-label">Last Name</label>
+                      <input type="text" name="last_name" value="{{user_detail.last_name}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                </div>
+
+                <div class="row justify-content-between">
+                    <div class="mb-5 col-12 col-sm-11 col-md-6 col-lg-6">
+                        <label for="exampleInputEmail1" class="form-label">Email</label>
+                        <input type="email" name="email" value="{{user_detail.email}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" disabled>
+                    </div>
+                    <div class="mb-5 col-12 col-sm-11 col-md-6 col-lg-6">
+                      <label for="exampleInputEmail1" class="form-label">Phone</label>
+                      <input type="number" name="phone" value="{{user_detail.phone}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-5 col-12 col-sm-11 col-md-6 col-lg-6">
+                        <label for="exampleInputEmail1" class="form-label">Department</label>
+                        <select class="form-select col-2" name="department" aria-label="Default select example">
+                            <option value="{{user_detail.department}}" selected>{{user_detail.department}}</option>
+                            <option value="Computer">Computer</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="Civil">Civil</option>
+                        </select>
+                    </div>
+                    <div class="mb-5 col-12 col-sm-11 col-md-6 col-lg-6">
+                        <label for="exampleInputEmail1" class="form-label">User Role</label>
+                        <select class="form-select col-2" name="user_role" aria-label="Default select example" {% if not request.user.is_superuser %}disabled{% endif %}>
+                            <option value="{{user_detail.user_role}}" selected>{{user_detail.user_role}}</option>
+                            {% for x in user_roles %}
+                                <option value="{{x.user_role}}">{{x.user_role}}</option>          
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row justify-content-between" id="change_password_block">
+                    <div class="mb-5 col-12 col-sm-11 col-md-4 col-lg-4">
+                        <label for="exampleInputEmail1" class="form-label">Old Password</label>
+                        <input type="password" name="old_password" class="form-control" onchange="checkPassword()" id="old_password" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-5 col-12 col-sm-11 col-md-4 col-lg-4">
+                      <label for="exampleInputEmail1" class="form-label">New Password</label>
+                      <input type="password" name="new_password" class="form-control" onchange="checkPassword()" id="new_password" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-5 col-12 col-sm-11 col-md-4 col-lg-4">
+                        <label for="exampleInputEmail1" class="form-label">Confirm New Password</label>
+                        <input type="password" name="confirm_new_password" class="form-control" onchange="checkPassword()" id="confirm_new_password" aria-describedby="emailHelp">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submit_button">Submit</button>
+
+                <div class="mt-2" id="password_rules">
+                    Note: Password length should be atleast 8 characters and should contain atleast 1 uppercase letter and 1 number.
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    let loggedInUser = "{{request.user.email}}";
+    let profileUser = "{{user_detail.email}}";
+</script>
+<script src="/static/profile.js"></script>
+
+
+{% endblock body %}
+
+

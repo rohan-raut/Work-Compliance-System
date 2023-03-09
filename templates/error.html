@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Error{% endblock title %}
+
+{% block additional_links %}
+<link rel="stylesheet" href="/static/error.css">
+{% endblock additional_links %}
+
+{% block body %}
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 message_block border border-dark">
+            {{message}}
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
+
+

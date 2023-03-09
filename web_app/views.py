@@ -142,8 +142,6 @@ def login_view(request):
     if(request.method == "POST"):
         username = request.POST.get('email')
         password = request.POST.get('password')
-        print(username)
-        print(password)
         user = authenticate(request, email=username, password=password)
         if user is not None:
             login(request, user)
@@ -211,7 +209,50 @@ def task_detail_view(request, pk):
 
 
 
+def profile_view(request, pk):
 
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        phone = request.POST['phone']
+        department = request.POST['department']
+        user_role = request.POST['user_role']
+        old_password = request.POST['old_password']
+        new_password = request.POST['new_password']
+        confirm_new_password = request.POST['confirm_new_password']
+        user = Account.objects.get(email=pk)
+        if first_name != '':
+            user.first_name = first_name
+        if last_name != '':
+            user.last_name = last_name
+        if phone != '':
+            user.phone = phone
+        user.department = department
+        user.user_role = user_role
+
+        if old_password != '':
+            check_user = authenticate(request, email=request.user.email, password=old_password)
+            if check_user is not None:
+                user.set_password(new_password)
+            else:
+                # throw an error
+                print("Old password does not match")
+        user.save()
+
+    data = {}
+    if (request.user.is_superuser == False and pk != request.user.email):
+        data['message'] = "You do not have access to this information"
+        return render(request, 'error.html', data)
+
+    user = Account.objects.get(email=pk)
+    data['user_detail'] = user
+    hierarchy = Organization_Hierarchy.objects.all()
+    data['user_roles'] = hierarchy
+    return render(request, 'profile.html', data)
+
+
+def error_view(request):
+    return render(request, 'error.html')
 
 
 # git remote add origin git@github.com:rohan-raut/Work-Compliance-System.git

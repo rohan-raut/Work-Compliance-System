@@ -41,10 +41,18 @@ h1{
     font-size: 25px;
 }
 
+.dropdown{
+    list-style-type: none;
+}
+
+
 
 /* hide right corner email for mobile */
 @media screen and (max-width: 550px){
     .user_email{
+        display: none;
         visibility: hidden;
     }
 }
+
+
