@@ -74,7 +74,13 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="submit_button">Submit</button>
+                <div class="button_div d-flex flex-wrap justify-content-end">
+                    <a class="delete_button_link" href="/delete/{{user_detail.email}}">
+                        <button type="button" class="btn btn-danger" id="delete_button">Delete</button>
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="submit_button">Submit</button>
+                </div>
+
 
                 <div class="mt-2" id="password_rules">
                     Note: Password length should be atleast 8 characters and should contain atleast 1 uppercase letter and 1 number.

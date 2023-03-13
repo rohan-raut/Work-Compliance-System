@@ -255,6 +255,18 @@ def error_view(request):
     return render(request, 'error.html')
 
 
+def all_users_view(request):
+    data = {}
+    data['users'] = Account.objects.all()
+    return render(request, 'all_users.html', data)
+
+
+def delete_user_view(request, pk):
+    user = Account.objects.get(email=pk)
+    user.delete()
+    return redirect('/all-users')
+
+
 # git remote add origin git@github.com:rohan-raut/Work-Compliance-System.git
 # git branch -M main
 # git push -u origin main

@@ -1,5 +1,5 @@
 from django.urls import path
-from web_app.views import dashboard_view, assign_task_view, assigned_tasks_view, to_do_view, register_view, login_view, logout_view, make_hierarchy_view, task_detail_view, profile_view, error_view
+from web_app.views import dashboard_view, assign_task_view, assigned_tasks_view, to_do_view, register_view, login_view, logout_view, make_hierarchy_view, task_detail_view, profile_view, error_view, all_users_view, delete_user_view
 
 
 
@@ -15,5 +15,7 @@ urlpatterns = [
     path('make-hierarchy/', make_hierarchy_view, name="make_hierarchy_view"),
     path('profile/<str:pk>/', profile_view, name="profile_view"),
     path('error/', error_view, name="error_view"),
+    path('all-users/', all_users_view, name="all_users_view"),
+    path('delete/<str:pk>/', delete_user_view, name="delete_user_view"),
 ]
 

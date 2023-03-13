@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}All Users{% endblock title %}
+
+{% block additional_links %}
+<link rel="stylesheet" href="/static/all_users.css">
+{% endblock additional_links %}
+
+{% block body %}
+
+
+<div class="container mt-3 mb-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-11 col-md-11 col-lg-9 border border-dark main_content">
+            <h1 class="mb-4">All Users</h1>
+            
+            <table align="center">
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Actions</th>
+                </tr>
+        
+                {% for x in users %}
+                    <tr>
+                        <td>{{x.first_name}} {{x.last_name}}</td>
+                        <td>{{x.email}}</td>
+                        <td><a href="/profile/{{x.email}}"><button class="btn btn-sm btn-primary">Edit</button></a></td>
+                    </tr>
+                {% endfor %}
+                
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="/static/assign-task.js"></script>
+
+{% endblock body %}
+
+
