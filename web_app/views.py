@@ -55,7 +55,6 @@ def assign_task_view(request):
         assignor_email = request.user.email
         status = "In Progress"
         files = request.FILES.getlist('upload_file')
-        print(files)
 
         task_obj = Task(assignor_name=assignor_name, assignor_email=assignor_email, assignee_name=assignee_name, assignee_email=assignee_email, title=title, description=description, deadline=deadline, status=status)
         task_obj.save()
@@ -199,12 +198,20 @@ def make_hierarchy_view(request):
 
 
 def task_detail_view(request, pk):
+    if request.method == "POST":
+        files = request.FILES.getlist('upload_file')
+        for x in files:
+            file_obj = File(task_id=pk, file=x, uploaded_by_email=request.user.email)
+            file_obj.save()
+        task = Task.objects.get(task_id=pk)
+        task.status = "Under Review"
+        task.save()
+
     data = {}
-    api = "http://127.0.0.1:8000/api/task-details/" + str(pk) + "/"
-    resp = requests.get(api)
-    json_data = json.loads(resp.text)
-    data = json_data
-    print(data)
+    data['task_details'] = Task.objects.get(task_id=pk)
+    data['files'] = File.objects.filter(task_id=pk)
+    data['file_cnt'] = len(File.objects.filter(task_id=pk, uploaded_by_email=data['task_details'].assignee_email))
+    print(data['file_cnt'])
     return render(request, 'task_detail.html', data)    
 
 
@@ -265,6 +272,14 @@ def delete_user_view(request, pk):
     user = Account.objects.get(email=pk)
     user.delete()
     return redirect('/all-users')
+
+
+def change_task_status(request, pk):
+    task = Task.objects.get(task_id=pk)
+    status = request.POST['change_status']
+    task.status = status
+    task.save()
+    return redirect('/task-detail/' + pk)
 
 
 # git remote add origin git@github.com:rohan-raut/Work-Compliance-System.git

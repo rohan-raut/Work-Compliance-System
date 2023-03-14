@@ -1,3 +1,75 @@
 python manage.py makemigations
 python manage.py sqlmigrate app_name 0001
 python manage.py migrate
+
+
+Emails
+
+Reminder - Rohan assigned task to Satyen
+Subject: "Task Title"
+Body:
+Hi Satyen,
+This is a friendly reminder to inform you that the deadline for the task you were assigned is approaching which is due on [due date].
+Please ensure that the task is completed and submitted before the due date. If you have any concerns or issues regarding the task, please contact Rohan Raut or you can comment on the task page for further assistance.
+Link to Task Page: http://127.0.0.1:8000/task-detail/12/
+
+
+
+When task is assigned
+Subject: New Task: Title
+Body:
+Hi Satyen,
+Rohan Raut assigned a new task which is due on [due date].
+Link to the Task: http://127.0.0.1:8000/task-detail/12/
+
+
+Satyen submits the task
+Subject: Task Submitted: Title
+Body:
+Hi Rohan,
+Satyen Patil just completed the task "title", please make sure to review the submitted task and update the status.
+Link to the task: http://127.0.0.1:8000/task-detail/12/
+
+
+When the task is accepted
+Subject: Task Status: Title
+Body:
+Hi Satyen,
+Rohan Raut just reviewed your task "title" and your task has been approved. You can check the status of your task using the below link.
+Link to task page: http://127.0.0.1:8000/task-detail/12/
+
+
+
+When the task is rejected
+Subject: Task Status: Title
+Body:
+Hi Satyen,
+Rohan Raut just reviewed your task "title" and your task has not been approved. Please make the necessary changes and resubmit it before the due date.
+Link to task page: http://127.0.0.1:8000/task-detail/12/
+
+
+
+When new comment is added
+Subject: New Comment: Title
+Body:
+Hi Rohan,
+Satyen just added a new comment on Task "Title".
+Link to Task Page: http://127.0.0.1:8000/task-detail/12/
+
+
+
+When the task crosses deadline
+Subject: Not Submitted: Title
+Body:
+Hi Satyen,
+Your Task "Title" has crossed the deadline and you won't be able to submit this task. Please contact Rohan Raut for further assistance.
+Link to Task Page: http://127.0.0.1:8000/task-detail/12/
+
+
+When the hierarchy is changed
+Subject: Organization hierarchy changed.
+Body:
+Hi Rohan,
+Organization hierarchy is just changed. You need to update the roles of the following users otherwise they won't be able to assign task to anyone:
+1. Satyen Patil : http://127.0.0.1:8000/profile/satyenpatil13@gmail.com/
+2. .....

@@ -8,18 +8,103 @@
 
 {% block body %}
 
-<div class="container task_detail_container border border-dark">
-    <h1>{{title}}</h1>
-    <p>Description: {{description}}</p>
+
+<div class="container mt-3 mb-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-11 col-md-11 col-lg-9 border border-dark main_content">
+            <h1>{{task_details.title}}</h1>
+            <div class="assigned_by">Assigned By: {{task_details.assignor_name}}</div>
+
+            <hr>
+
+            <div class="description mb-2">
+                <b>Description: </b> {{task_details.description}}
+            </div>
+
+            <div class="deadline mb-2">
+                <b>Due Date: </b> {{task_details.deadline}}
+            </div>
+
+            <div class="status mb-4">
+                <b>Status: </b> {{task_details.status}}
+            </div>
+
+            <div class="file_container mt-3 d-flex flex-wrap">
+                {% for x in files %}
+                    {% if x.uploaded_by_email == task_details.assignor_email %}
+                        <a class="file mb-3" href="/media/{{x.file}}">
+                            <img class="file_icon" src="/static/file_icon.png">
+                            <p class="file_name">{{x.file}}</p>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+
+            {% if task_details.status == "In Progress" and request.user.email == task_details.assignee_email %}
+            <hr>    
+            <form method="POST" action="/task-detail/{{task_details.task_id}}/" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 mb-4">
+                    <label for="upload_file" class="form-label">Upload File</label>
+                    <input type="file" class="form-control" id="form_field" name="upload_file" onchange="update_file_list()" multiple>
+                </div>
+
+                <div class="mt-3" id="uploaded_file_list"></div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            {% else %}
+                {% if file_cnt != 0 %}
+                <hr>
+                <h2>Submitted Files</h2>
+                {% endif %}
+                <div class="file_container mt-3 d-flex flex-wrap">
+                    {% for x in files %}
+                        {% if x.uploaded_by_email == task_details.assignee_email %}
+                            <a class="file mb-3" href="/media/{{x.file}}">
+                                <img class="file_icon" src="/static/file_icon.png">
+                                <p class="file_name">{{x.file}}</p>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if task_details.status == "Under Review" and request.user.email == task_details.assignor_email %}
+                {% if file_cnt == 0 %}<hr>{% endif %}    
+                <form method="POST" action="/change-task-status/{{task_details.task_id}}/" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="col-12 col-sm-12 col-md-4 col-lg-4 mb-4">
+                            <label for="change_status" class="form-label">Change Status</label>
+                            <select class="form-select" aria-label="Default select example" name="change_status">
+                                <option value="Under Review" selected>Under Review</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+            
+
+            <hr>
+            <div class="container comment_section border border-dark">
+                <p>Comment</p>
+                <form action="/task-detail/{{task_id}}/" method="post">
+                    <input type="text">
+                    <button type="submit" class="btn btn-sm btn-primary">Send</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
 </div>
 
-<div class="container comment_section border border-dark">
-    <p>Comment</p>
-    <form action="/task-detail/{{task_id}}/" method="post">
-        <input type="text">
-        <button type="submit" class="btn btn-sm btn-primary">Send</button>
-    </form>
-</div>
+
+<script src="/static/task_detail.js"></script>
 
 {% endblock body %}
 

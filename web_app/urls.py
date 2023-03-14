@@ -1,5 +1,5 @@
 from django.urls import path
-from web_app.views import dashboard_view, assign_task_view, assigned_tasks_view, to_do_view, register_view, login_view, logout_view, make_hierarchy_view, task_detail_view, profile_view, error_view, all_users_view, delete_user_view
+from web_app.views import dashboard_view, assign_task_view, assigned_tasks_view, to_do_view, register_view, login_view, logout_view, make_hierarchy_view, task_detail_view, profile_view, error_view, all_users_view, delete_user_view, change_task_status
 
 
 
@@ -17,5 +17,6 @@ urlpatterns = [
     path('error/', error_view, name="error_view"),
     path('all-users/', all_users_view, name="all_users_view"),
     path('delete/<str:pk>/', delete_user_view, name="delete_user_view"),
+    path('change-task-status/<str:pk>/', change_task_status, name="change_task_status"),
 ]
 

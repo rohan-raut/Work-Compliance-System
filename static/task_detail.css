@@ -4,11 +4,68 @@
 }
 
 .comment_section{
-    width: 80%;
     margin-top: 10px;
     padding: 10px;
 }
 
 h1{
     text-align: left;
+    margin-bottom: 5px;
+}
+
+.main_content{
+    padding: 30px 25px;
+    background-color: white;
+}
+
+.file{
+    border: 1px solid black;
+    width: 45%;
+    margin-right: 20px;
+    padding: 2px 10px;
+    border-radius: 15px;
+}
+
+.file_icon{
+    display: inline-block;
+    width: 40px;
+    margin-right: 10px;
+}
+
+.file_name{
+    display: inline-block;
+}
+
+h2{
+    font-size: 18px;
+}
+
+.trash_icon{
+    width: 50px;
+    height: 30px;
+}
+
+
+@media screen and (max-width: 576px){
+    .file{
+        width: 95%;
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px){
+    .file{
+        width: 95%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px){
+    .file{
+        width: 45%;
+    }
+}
+
+@media screen and (min-width: 992px){
+    .file{
+        width: 45%;
+    }
 }
