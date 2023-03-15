@@ -79,7 +79,7 @@
                         <div class="col-12 col-sm-12 col-md-4 col-lg-4 mb-4">
                             <label for="change_status" class="form-label">Change Status</label>
                             <select class="form-select" aria-label="Default select example" name="change_status">
-                                <option value="Under Review" selected>Under Review</option>
+                                <option value="In Progress" selected>In Progress</option>
                                 <option value="Completed">Completed</option>
                             </select>
                         </div>
@@ -91,11 +91,22 @@
             
 
             <hr>
-            <div class="container comment_section border border-dark">
-                <p>Comment</p>
-                <form action="/task-detail/{{task_id}}/" method="post">
-                    <input type="text">
-                    <button type="submit" class="btn btn-sm btn-primary">Send</button>
+            <div class="container comment_section">
+                <h2 class="mb-3">Comment</h2>
+
+                {% for x in comments %}
+                <div class="comment">
+                    <p class="commentor_name"><b>{{x.commentor_name}}</b></p>
+                    <p>{{x.comment}}</p>
+                </div>
+                {% endfor %}
+
+                <form action="/add-comment/{{task_details.task_id}}/" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="comment" placeholder="Comment...">
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary">Add Comment</button>
                 </form>
             </div>
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from api_services.models import Account, Task, Organization_Hierarchy, File
+from api_services.models import Account, Task, Organization_Hierarchy, File, Comment
 import datetime
 import requests
 import json
@@ -15,11 +15,18 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
+# global variable declaration and assignment
+global sender_email, sender_name, password, hostname, port
+
+sender_email = "rohan.raut@mmit.edu.in"
+sender_name = "no reply"
+password = "chzhpfltnmgwnfnv"
+hostname = "127.0.0.1"
+port = "8000"
+
+
 # fuction to send email notification
 def send_notification(receiver_email, subject, body):
-    sender_email = 'rohan.raut@mmit.edu.in'
-    sender_name = 'Rohan Raut'
-    password = 'chzhpfltnmgwnfnv'
     try:
         smtpObj = smtplib.SMTP(host='smtp.gmail.com', port=587)
         smtpObj.starttls()
@@ -60,8 +67,11 @@ def assign_task_view(request):
         task_obj.save()
 
         last_obj = Task.objects.last()
-        task_id = last_obj.task_id
+        task_id = last_obj.task_id     
 
+        email_subject = "New Task: " + title
+        email_body = "Hi {},\n{} assigned a new task which is due on {}.\nLink to the Task: http://{}:{}/task-detail/{}/".format(assignee_name, assignor_name, deadline, hostname, port, task_id) 
+        send_notification(assignee_email, email_subject, email_body)
 
         for x in files:
             file_obj = File(task_id=task_id, file=x, uploaded_by_email=assignor_email)
@@ -206,12 +216,15 @@ def task_detail_view(request, pk):
         task = Task.objects.get(task_id=pk)
         task.status = "Under Review"
         task.save()
+        email_subject = "Task Submitted: " + task.title
+        email_body = "Hi {},\n{} just completed the task - {}, please make sure to review the submitted task and update the status.\nLink to the task: http://{}:{}/task-detail/{}/".format(task.assignor_name, task.assignee_name, task.title, hostname, port, pk)
+        send_notification(task.assignor_email, email_subject, email_body)
 
     data = {}
     data['task_details'] = Task.objects.get(task_id=pk)
     data['files'] = File.objects.filter(task_id=pk)
     data['file_cnt'] = len(File.objects.filter(task_id=pk, uploaded_by_email=data['task_details'].assignee_email))
-    print(data['file_cnt'])
+    data['comments'] = Comment.objects.filter(task_id=pk)
     return render(request, 'task_detail.html', data)    
 
 
@@ -279,6 +292,38 @@ def change_task_status(request, pk):
     status = request.POST['change_status']
     task.status = status
     task.save()
+    
+    email_subject = "Task Status: " + task.title
+    if status == "In Progress":
+        email_body = "Hi {},\n{} just reviewed your task - {} and your task has not been approved. Please make the necessary changes and resubmit it before the due date.\nLink to task page: http://{}:{}/task-detail/{}/".format(task.assignee_name, task.assignor_name, task.title, hostname, port, task.task_id)
+        send_notification(task.assignee_email, email_subject, email_body)
+    else:
+        email_body = "Hi {},\n{} just reviewed your task - {} and your task has been approved. You can check the status of your task using the below link.\nLink to task page: http://{}:{}/task-detail/{}/".format(task.assignee_name, task.assignor_name, task.title, hostname, port, task.task_id)
+        send_notification(task.assignee_email, email_subject, email_body)
+    
+    return redirect('/task-detail/' + pk)
+
+
+def add_comment(request, pk):
+    comment = request.POST['comment']
+    name = request.user.first_name + ' ' + request.user.last_name
+    is_blank = True
+    for x in comment:
+        if(x != ' '):
+            is_blank = False
+    
+    if(is_blank == False):
+        comment_obj = Comment(task_id=pk, commentor_name=name, comment=comment)
+        comment_obj.save()
+        task = Task.objects.get(task_id=pk)
+        email_subject = "New Comment: " + task.title
+        if(name == task.assignor_name):
+            email_body = "{} just added a new comment on Task - {}.\nLink to Task Page: http://{}:{}/task-detail/{}/".format(task.assignee_email, task.title, hostname, port, pk)
+            send_notification(task.assignee_email, email_subject, email_body)
+        else:
+            email_body = "{} just added a new comment on Task - {}.\nLink to Task Page: http://{}:{}/task-detail/{}/".format(task.assignor_name, task.title, hostname, port, pk)
+            send_notification(task.assignor_name, email_subject, email_body)
+    
     return redirect('/task-detail/' + pk)
 
 

@@ -45,6 +45,20 @@ h2{
     height: 30px;
 }
 
+.comment{
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0px 15px;
+    padding-top: 5px;
+    width: 90%;
+    background-color: #E8E9EF;
+    margin: 10px 0px;
+}
+
+.commentor_name{
+    margin-bottom: 0px;
+}
+
 
 @media screen and (max-width: 576px){
     .file{
