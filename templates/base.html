@@ -14,7 +14,7 @@
     <nav class="navbar navbar_custom navbar-expand-lg bg-body-tertiary px-3">
       <div class="container-fluid d-flex justify-content-between">
         <div class="navbar_item d-flex align-items-center">
-          <div class="menu_container" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+          <div class="menu_icon_container" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
             <div class="menu_icon"></div>
             <div class="menu_icon"></div>
             <div class="menu_icon"></div>
@@ -46,23 +46,36 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="menu_container">
-        <div class="mx-4 my-3">
-          <a href="/dashboard">Dashboard</a>
+        <div id="dashboard">
+          <a class="menu_item" href="/dashboard">Dashboard</a>
         </div>
-        <div class="mx-4 my-3">
-          <a href="/assign-task">Assign Task</a>
+        <div id="assign_task">
+          <a class="menu_item" href="/assign-task">Assign Task</a>
         </div>
-        <div class="mx-4 my-3">
-          <a href="/assigned-tasks">Assigned Tasks</a>
+        <div id="assigned_task">
+          <a class="menu_item" href="/assigned-tasks">Assigned Tasks</a>
         </div>
-        <div class="mx-4 my-3">
-          <a href="/to-do">To Do</a>
+        <div id="to_do">
+          <a class="menu_item" href="/to-do">To Do</a>
         </div>
-        <div class="mx-4 my-3">
-          <a href="/register">Register</a>
+
+        {% if request.user.is_superuser %}
+        <div id="register">
+          <a class="menu_item" href="/register">Register</a>
         </div>
-        <div class="mx-4 my-3">
-          <a href="/make-hierarchy">Make Hierarchy</a>
+        <div id="make_hierarchy">
+          <a class="menu_item" href="/make-hierarchy">Make Hierarchy</a>
+        </div>
+        <div id="all_users">
+          <a class="menu_item" href="/all-users">All Users</a>
+        </div>
+        {% endif %}
+        
+        <div id="profile">
+          <a class="menu_item" href="/profile/{{request.user.email}}">Profile</a>
+        </div>
+        <div id="logout">
+          <a class="menu_item" href="/logout">Logout</a>
         </div>
       </div>
     </div>

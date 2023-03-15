@@ -47,10 +47,15 @@ def send_notification(receiver_email, subject, body):
 # Create your views here.
 
 def dashboard_view(request):
+    if request.user.is_anonymous == True:
+        return redirect('/login')
     return render(request, 'dashboard.html')
 
 
 def assign_task_view(request):
+    if request.user.is_anonymous == True:
+        return redirect('/login')
+    
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
@@ -98,6 +103,9 @@ def assign_task_view(request):
 
 
 def assigned_tasks_view(request):
+    if request.user.is_anonymous == True:
+        return redirect('/login')
+    
     data = {}
     api = "http://127.0.0.1:8000/api/task-details?assignor_email=" + request.user.email
     resp = requests.get(api)
@@ -111,6 +119,9 @@ def assigned_tasks_view(request):
 
 
 def to_do_view(request):
+    if request.user.is_anonymous == True:
+        return redirect('/login')
+    
     data = {}
     api = "http://127.0.0.1:8000/api/task-details?assignee_email=" + request.user.email + "&status=In Progress"
     resp = requests.get(api)
@@ -124,6 +135,13 @@ def to_do_view(request):
 
 
 def register_view(request):
+    data = {}
+    if request.user.is_anonymous == True:
+        return redirect('/login')
+    if request.user.is_superuser == False:
+        data['message'] = "You do not have rights to access this page."
+        return redirect('/error', data)
+    
     if(request.method == 'POST'):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
@@ -141,7 +159,6 @@ def register_view(request):
         else:
             return HttpResponse("<p>Password's should match.</p>")
 
-    data = {}
     hierarchy = Organization_Hierarchy.objects.all()
     data['user_roles'] = hierarchy
     return render(request, 'register.html', data)
@@ -161,13 +178,19 @@ def login_view(request):
         return render(request, 'login.html')
 
 
-
 def logout_view(request):
     logout(request)
     return redirect('/login')
 
 
 def make_hierarchy_view(request):
+    data = {}
+    if request.user.is_anonymous == True:
+        return redirect('/login')
+    if request.user.is_superuser == False:
+        data['message'] = "You do not have rights to access this page."
+        return redirect('/error', data)
+
 
     if(request.method == "POST"):
         data_list = []
@@ -189,9 +212,6 @@ def make_hierarchy_view(request):
             obj = Organization_Hierarchy(user_role=x['user_role'], priority=x['priority'], show_report=show_report_in_bool)
             obj.save()
 
-        
-
-    data = {}
     api = "http://127.0.0.1:8000/api/organization-hierarchy/"
     resp = requests.get(api)
     data['objs'] = json.loads(resp.text)
@@ -206,8 +226,10 @@ def make_hierarchy_view(request):
     return render(request, 'make_hierarchy.html', data)
 
 
-
 def task_detail_view(request, pk):
+    if request.user.is_anonymous == True:
+        return redirect('/login')
+    
     if request.method == "POST":
         files = request.FILES.getlist('upload_file')
         for x in files:
@@ -222,21 +244,28 @@ def task_detail_view(request, pk):
 
     data = {}
     data['task_details'] = Task.objects.get(task_id=pk)
+
+    # the requesting user should be assignor or assignee
+    if(request.user.email != data['task_details'].assignee_email and request.user.email != data['task_details'].assignor_email):
+        data['message'] = "You do not have rights to access the details of this task."
+        return render(request, 'error.html', data)
+
     data['files'] = File.objects.filter(task_id=pk)
     data['file_cnt'] = len(File.objects.filter(task_id=pk, uploaded_by_email=data['task_details'].assignee_email))
     data['comments'] = Comment.objects.filter(task_id=pk)
     return render(request, 'task_detail.html', data)    
 
 
-
 def profile_view(request, pk):
+    if request.user.is_anonymous == True:
+        return redirect('/login')
 
     if request.method == 'POST':
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         phone = request.POST['phone']
         department = request.POST['department']
-        user_role = request.POST['user_role']
+        user_role = request.POST.get('user_role')
         old_password = request.POST['old_password']
         new_password = request.POST['new_password']
         confirm_new_password = request.POST['confirm_new_password']
@@ -247,8 +276,10 @@ def profile_view(request, pk):
             user.last_name = last_name
         if phone != '':
             user.phone = phone
+        if user_role != None:
+            user.user_role = user_role
         user.department = department
-        user.user_role = user_role
+        
 
         if old_password != '':
             check_user = authenticate(request, email=request.user.email, password=old_password)
@@ -267,7 +298,7 @@ def profile_view(request, pk):
     user = Account.objects.get(email=pk)
     data['user_detail'] = user
     hierarchy = Organization_Hierarchy.objects.all()
-    data['user_roles'] = hierarchy
+    data['hierarchy'] = hierarchy
     return render(request, 'profile.html', data)
 
 
@@ -277,11 +308,21 @@ def error_view(request):
 
 def all_users_view(request):
     data = {}
+    if request.user.is_anonymous == True:
+        return redirect('/login')
+    if request.user.is_superuser == False:
+        data['message'] = "You do not have rights to access this page"
+        return redirect('/error', data)
+    
     data['users'] = Account.objects.all()
     return render(request, 'all_users.html', data)
 
 
 def delete_user_view(request, pk):
+    data = {}
+    if request.user.is_superuser == False:
+        data['message'] = "You do not have rights to delete a user."
+        return redirect('/error', data)
     user = Account.objects.get(email=pk)
     user.delete()
     return redirect('/all-users')

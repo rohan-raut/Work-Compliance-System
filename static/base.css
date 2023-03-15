@@ -5,7 +5,7 @@
     margin: 4px 0px;
 }
 
-.menu_container{
+.menu_icon_container{
     margin-right: 20px;
 }
 
@@ -43,6 +43,18 @@ h1{
 
 .dropdown{
     list-style-type: none;
+}
+
+.menu_item{
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: black;
+    padding: 10px 30px;
+}
+
+#dashboard:hover, #assign_task:hover, #assigned_task:hover, #to_do:hover, #register:hover, #make_hierarchy:hover, #all_users:hover, #profile:hover, #logout :hover{
+    background-color: white;
 }
 
 

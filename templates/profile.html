@@ -52,7 +52,7 @@
                         <label for="exampleInputEmail1" class="form-label">User Role</label>
                         <select class="form-select col-2" name="user_role" aria-label="Default select example" {% if not request.user.is_superuser %}disabled{% endif %}>
                             <option value="{{user_detail.user_role}}" selected>{{user_detail.user_role}}</option>
-                            {% for x in user_roles %}
+                            {% for x in hierarchy %}
                                 <option value="{{x.user_role}}">{{x.user_role}}</option>          
                             {% endfor %}
                         </select>
