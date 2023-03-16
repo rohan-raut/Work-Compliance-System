@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from api_services.models import Account, Task, Organization_Hierarchy, File, Comment
-import datetime
+from datetime import datetime
+from datetime import date
 import requests
 import json
 from django.contrib.auth import logout
@@ -90,10 +91,18 @@ def assign_task_view(request):
     data = {}
     data['user_info'] = []
 
+    # Check if a user role is valid or not
+    valid_user_role = False
+
     hierarchy_map = {}
     for x in hierarchy:
         hierarchy_map[x.user_role] = x.priority
+        if(request.user.user_role == x.user_role):
+            valid_user_role = True
 
+    if(valid_user_role == False):
+        data['message'] = "You cannot assign task to anyone. Please contact system admin to change your user role."
+        return render(request, 'error.html', data)
 
     for x in user_list:
         if(hierarchy_map[x['user_role']] >= hierarchy_map[request.user.user_role] and x['email'] != request.user.email):
@@ -211,6 +220,30 @@ def make_hierarchy_view(request):
                 show_report_in_bool = False
             obj = Organization_Hierarchy(user_role=x['user_role'], priority=x['priority'], show_report=show_report_in_bool)
             obj.save()
+
+        # check if all user's user_role exists
+        hierarchy_objs = Organization_Hierarchy.objects.all()
+        all_users = Account.objects.all()
+        counter = 1
+        email_body = ""
+        for x in all_users:
+            has_user_role = False
+            for y in hierarchy_objs:
+                if(y.user_role == x.user_role):
+                    has_user_role = True
+                    break
+            if(has_user_role == False):
+                email_body = email_body + str(counter) + ". " + x.first_name + " " + x.last_name + " : http://" + hostname + ":" + port + "/profile/" + x.email + "\n"
+                counter = counter + 1
+
+        if(counter != 1):
+            all_superusers = Account.objects.filter(is_superuser=True)
+            email_subject = "Organization hierarchy changed."
+            email_body = "Organization hierarchy is just changed. You need to update the roles of the following users otherwise they won't be able to assign task to anyone:\n" + email_body
+            for x in all_superusers:
+                message = "Hi " + x.first_name + ",\n" + email_body
+                send_notification(x.email, email_subject, message)
+
 
     api = "http://127.0.0.1:8000/api/organization-hierarchy/"
     resp = requests.get(api)
@@ -367,6 +400,34 @@ def add_comment(request, pk):
     
     return redirect('/task-detail/' + pk)
 
+
+# Temporary functions that should run on cron job
+# Follow the sequence:
+# http://127.0.0.1:8000/change-status-cronjob
+# http://127.0.0.1:8000/send-reminder-cronjob
+
+
+def change_status_cronjob(request):
+    tasks = Task.objects.filter(status="In Progress")
+    today = date.today()
+    for x in tasks:
+        deadline = x.deadline.date()
+        if(deadline < today):
+            x.status = "Not Done"
+            x.save()
+            email_subject = "Not Submitted: " + x.title
+            email_body = "Hi {},\nYour Task - {} has crossed the deadline and you won't be able to submit this task. Please contact {} for further assistance.\nLink to Task Page: http://{}:{}/task-detail/{}/".format(x.assignee_name, x.title, x.assignor_name, hostname, port, x.task_id)
+            send_notification(x.assignee_email, email_subject, email_body)
+    return HttpResponse("<p>Done</p>")
+
+
+def send_reminder_cronjob(request):
+    tasks = Task.objects.filter(status="In Progress")
+    for x in tasks:
+        email_subject = x.title
+        email_body = "Hi {},\nThis is a friendly reminder to inform you that the deadline for the task you were assigned is approaching which is due on {}.\nPlease ensure that the task is completed and submitted before the due date. If you have any concerns or issues regarding the task, please contact {} or you can comment on the task page for further assistance.\nLink to Task Page: http://{}:{}/task-detail/{}/".format(x.assignee_name, x.deadline, x.assignor_name, hostname, port, x.task_id)
+        send_notification(x.assignee_email, email_subject, email_body)
+    return HttpResponse("<p>Emails send Successfully</p>")
 
 # git remote add origin git@github.com:rohan-raut/Work-Compliance-System.git
 # git branch -M main

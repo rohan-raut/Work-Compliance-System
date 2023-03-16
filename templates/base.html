@@ -67,11 +67,13 @@
           <a class="menu_item" href="/make-hierarchy">Make Hierarchy</a>
         </div>
         <div id="all_users">
+          <img src="/static/all_users.png" class="menu_icons" style="width: 30px;">
           <a class="menu_item" href="/all-users">All Users</a>
         </div>
         {% endif %}
         
         <div id="profile">
+          <img src="/static/profile.png" class="menu_icons" style="width: 40px;">
           <a class="menu_item" href="/profile/{{request.user.email}}">Profile</a>
         </div>
         <div id="logout">

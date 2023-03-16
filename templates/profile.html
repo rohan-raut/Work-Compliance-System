@@ -75,9 +75,11 @@
                 </div>
 
                 <div class="button_div d-flex flex-wrap justify-content-end">
+                    {% if request.user.is_superuser %}
                     <a class="delete_button_link" href="/delete/{{user_detail.email}}">
                         <button type="button" class="btn btn-danger" id="delete_button">Delete</button>
                     </a>
+                    {% endif %}
                     <button type="submit" class="btn btn-primary" id="submit_button">Submit</button>
                 </div>
 

@@ -31,10 +31,7 @@ body{
     background-color: #E8E9EF;
 }
 
-.menu_icons{
-    display: inline-block;
-    width: 50px;
-}
+
 
 h1{
     text-align: center;
@@ -45,12 +42,17 @@ h1{
     list-style-type: none;
 }
 
+
+.menu_icons{
+    display: inline-block;
+    margin-left: 30px;
+}
+
 .menu_item{
-    display: block;
-    width: 100%;
+    display: inline-block;
     text-decoration: none;
     color: black;
-    padding: 10px 30px;
+    padding: 10px 5px;
 }
 
 #dashboard:hover, #assign_task:hover, #assigned_task:hover, #to_do:hover, #register:hover, #make_hierarchy:hover, #all_users:hover, #profile:hover, #logout :hover{
