@@ -14,16 +14,20 @@
 <div class="task_list">
 
     {% for x in task_list %}
-        <a href="/task-detail/{{x.task_id}}" class="task border border-dark row justify-content-between">
-            <h2 class="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7 mb-2 title_block">{{x.title}}</h2>
-            <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-2 date_block">Deadline: {{x.deadline}}</div>
-            <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 name_block">Assigned To: {{x.assignee_name}}</div>
-            {% if x.status == "Under Review" %}
-                <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 button_block">
-                    <button class="btn btn-sm btn-primary">Review Task</button>
-                </div>
-            {% endif %}
-        </a>
+
+    {% if x.status == 'In Progress' or x.status == 'Under Review' %}
+    <a href="/task-detail/{{x.task_id}}" class="task border border-dark row justify-content-between">
+        <h2 class="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7 mb-2 title_block">{{x.title}}</h2>
+        <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-2 date_block">Deadline: {{x.deadline}}</div>
+        <div class="col-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 name_block">Assigned To: {{x.assignee_name}}</div>
+        {% if x.status == "Under Review" %}
+            <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 button_block">
+                <button class="btn btn-sm btn-primary">Review Task</button>
+            </div>
+        {% endif %}
+    </a>
+    {% endif %}
+        
     {% endfor %}
 
 </div>
