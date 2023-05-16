@@ -98,6 +98,13 @@ class Task(models.Model):
     status = models.CharField(max_length=100)
 
 
+class NewDeadline(models.Model):
+    task_id = models.IntegerField()
+    old_deadline = models.DateTimeField()
+    new_deadline = models.DateTimeField()
+    reason = models.CharField()
+
+
 
 # File database for every tasks
 class File(models.Model):
