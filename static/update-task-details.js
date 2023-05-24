@@ -1,5 +1,4 @@
-let fileList = [];
-let file_cnt = 0;
+
 
 function update_form_field_details() {
 	const dataTransfer = new DataTransfer()
@@ -29,7 +28,7 @@ function update_file_list() {
 	let lst = document.getElementById('form_field').files;
 	for(var i=0; i<lst.length; i++){
 		fileList.push(lst[i]);
-		console.log(lst[i]);
+        console.log(lst[i]);
 	}
 	update_form_field_details();
 }

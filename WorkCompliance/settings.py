@@ -86,9 +86,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
         # 'ENGINE': 'django.db.backends.postgresql',
         # 'NAME': 'workprism',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'postgres',
-        # 'HOST': 'localhost',
+        # 'USER': 'postgres@workprism',
+        # 'PASSWORD': 'workprism987!',
+        # 'HOST': 'workprism.postgres.database.azure.com',
+        # 'PORT': '5432',
+        # 'sslmode': 'require',
     }
 }
 

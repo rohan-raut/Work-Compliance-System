@@ -88,6 +88,12 @@
                     </form>
                 {% endif %}
             {% endif %}
+
+            {% if request.user.email == task_details.assignor_email %}
+                <a href="/update-task-details/{{task_details.task_id}}">
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </a>
+            {% endif %}
             
 
             <hr>

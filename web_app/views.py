@@ -111,6 +111,50 @@ def assign_task_view(request):
     return render(request, 'assign_task.html', data)
 
 
+def update_task_details_view(request, pk):
+
+    if request.method == "POST":
+        task_obj = Task.objects.get(pk=pk)
+        task_obj.title = request.POST.get('title')
+        task_obj.description = request.POST.get('description')
+        task_obj.assignee_email = request.POST.get('assign_to')
+        assignee_obj = Account.objects.get(email=task_obj.assignee_email)
+        task_obj.assignee_name = assignee_obj.first_name + ' ' + assignee_obj.last_name
+        task_obj.deadline = request.POST.get('deadline')
+        task_obj.save()
+
+        files = File.objects.filter(task_id=pk)
+        for x in files:
+            x.delete()
+
+        files = request.FILES.getlist('upload_file')
+        for x in files:
+            file_obj = File(task_id=pk, file=x, uploaded_by_email=request.user.email)
+            file_obj.save()
+
+        return redirect('/task-detail/' + str(pk))
+
+    data = {}
+    data['task_details'] = Task.objects.get(pk=pk)
+    data['task_details'].deadline = str(data['task_details'].deadline)
+
+    user_list = Account.objects.values()
+    hierarchy = Organization_Hierarchy.objects.all()
+    data['user_info'] = []
+
+    hierarchy_map = {}
+    for x in hierarchy:
+        hierarchy_map[x.user_role] = x.priority
+
+    for x in user_list:
+        if(hierarchy_map[x['user_role']] >= hierarchy_map[request.user.user_role] and x['email'] != request.user.email):
+            data['user_info'].append({'email': x['email'], 'name': x['first_name']+' '+x['last_name']})
+    
+    data['files'] = File.objects.filter(task_id=pk)
+
+    return render(request, 'update_task_details.html', data)
+
+
 def assigned_tasks_view(request):
     if request.user.is_anonymous == True:
         return redirect('/login')
