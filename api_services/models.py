@@ -87,15 +87,25 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
 # Task database model
 class Task(models.Model):
-    task_id = models.IntegerField(primary_key=True)
+    task_id = models.AutoField(primary_key=True)
     assignor_name = models.CharField(max_length=500)
     assignor_email = models.EmailField()
     assignee_name = models.CharField(max_length=500)
-    assignee_email = models.EmailField()
+    assignee_email = models.EmailField()    
     title = models.CharField(max_length=500)
     description = models.CharField(max_length=1000)
-    deadline = models.DateTimeField()
+    draft_date = models.DateField(auto_now=True)   # when task is created
+    deadline = models.DateField()
+    publish_date = models.DateField(null=True) # when task is submitted
     status = models.CharField(max_length=100)
+
+'''
+Task join with account on user_role -> result & assignee_email
+
+
+'''
+
+
 
 
 # class NewDeadline(models.Model):

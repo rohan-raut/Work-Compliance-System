@@ -313,6 +313,7 @@ def task_detail_view(request, pk):
             file_obj = File(task_id=pk, file=x, uploaded_by_email=request.user.email)
             file_obj.save()
         task = Task.objects.get(task_id=pk)
+        task.publish_date = datetime.now()
         task.status = "Under Review"
         task.save()
         email_subject = "Task Submitted: " + task.title
@@ -409,16 +410,17 @@ def change_task_status(request, pk):
     task = Task.objects.get(task_id=pk)
     status = request.POST['change_status']
     task.status = status
-    task.save()
     
     email_subject = "Task Status: " + task.title
     if status == "In Progress":
+        task.publish_date = None
         email_body = "Hi {},\n{} just reviewed your task - {} and your task has not been approved. Please make the necessary changes and resubmit it before the due date.\nLink to task page: http://{}:{}/task-detail/{}/".format(task.assignee_name, task.assignor_name, task.title, hostname, port, task.task_id)
         send_notification(task.assignee_email, email_subject, email_body)
     else:
         email_body = "Hi {},\n{} just reviewed your task - {} and your task has been approved. You can check the status of your task using the below link.\nLink to task page: http://{}:{}/task-detail/{}/".format(task.assignee_name, task.assignor_name, task.title, hostname, port, task.task_id)
         send_notification(task.assignee_email, email_subject, email_body)
     
+    task.save()
     return redirect('/task-detail/' + pk)
 
 
